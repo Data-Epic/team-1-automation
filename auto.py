@@ -6,6 +6,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe, get_as_dataframe
 
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -14,6 +15,7 @@ API_KEY = os.getenv('COHERE_API_KEY')
 if API_KEY is None:
     raise ValueError("Please set the COHERE_API_KEY environment variable.")
 co = cohere.ClientV2(API_KEY)
+
 
 # Set up Google Sheets credentials
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -26,9 +28,11 @@ sheet_id = "1yZBl7ew1tHOkVADUQZZ5thsAirXXoWYWuHONYFA96q4"
 sheet = client.open_by_key(sheet_id)
 worksheet = sheet.worksheet("Sheet1")  # Change to your sheet name
 
+
 # Load data into a DataFrame
 df = get_as_dataframe(worksheet)
 df = df.dropna(subset=['Review']).reset_index(drop=True)
+
 
 # Summarize function
 def summarize_text(user_review):
@@ -47,6 +51,7 @@ def summarize_text(user_review):
         print(f"Error in summarizing text: {e}")
         return None
 
+
 # Sentiment function
 def get_sentiment(user_review):
     try:
@@ -58,3 +63,10 @@ def get_sentiment(user_review):
     except Exception as e:
         print(f"Error in getting sentiment: {e}")
         return None
+
+
+# Apply transformations
+df['AI Summary'] = df['Review'].apply(summarize_text)
+df['AI Summary'] = df['AI Summary'].str.replace('\n', '')
+df['AI Sentiment'] = df['Review'].apply(get_sentiment)
+df['Action needed?'] = df['AI Sentiment'].apply(lambda x: 'Yes' if x == 'Negative' else 'No')

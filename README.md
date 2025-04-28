@@ -2,22 +2,22 @@
 
 This project uses **Cohere's NLP APIs** and **Google Sheets** to automatically analyze customer reviews. It:
 
-- ✅ Summarizes long reviews
-- ✅ Classifies sentiment (Positive / Neutral / Negative)
-- ✅ Adds an “Action needed?” column for negative feedback
-- ✅ Visualizes sentiment distribution with a pie chart directly inside Google Sheets
+- ✅ Summarizes long reviews  
+- ✅ Classifies sentiment (Positive / Neutral / Negative)  
+- ✅ Adds an “Action needed?” column for negative feedback  
+- ✅ Visualizes sentiment distribution with a pie chart directly inside Google Sheets  
 
 ---
 
 ## 🚀 Features
 
 | Feature                  | Description |
-|--------------------------|-------------|
-| **AI Summarization**     | Uses Cohere's `summarize` endpoint to reduce lengthy reviews into short one-sentence summaries. |
-| **Sentiment Analysis**   | Custom fine-tuned Cohere model classifies each review into Positive, Neutral, or Negative. |
-| **Smart Actions Column** | Flags reviews needing attention based on sentiment. |
-| **Live Google Sheet Sync** | Reads and writes reviews and outputs to a Google Sheet using the `gspread` API. |
-| **Pie Chart Generator**  | Automatically adds a visual pie chart of sentiment breakdown in your Google Sheet. |
+|---------------------------|-------------|
+| **AI Summarization**      | Uses Cohere's `summarize` endpoint to reduce lengthy reviews into short one-sentence summaries. |
+| **Sentiment Analysis**    | Custom fine-tuned Cohere model classifies each review into Positive, Neutral, or Negative. |
+| **Smart Actions Column**  | Flags reviews needing attention based on sentiment. |
+| **Live Google Sheet Sync**| Reads and writes reviews and outputs to a Google Sheet using the `gspread` API. |
+| **Pie Chart Generator**   | Automatically adds a visual pie chart of sentiment breakdown in your Google Sheet. |
 
 ---
 
@@ -34,7 +34,7 @@ pip install pandas cohere gspread gspread_dataframe python-dotenv google-auth go
 ## 🔐 Setup
 
 1. **Clone this repo**  
-   Or copy the script into your working directory.
+   Or copy the scripts into your working directory.
 
 2. **Create `.env` file**  
    ```bash
@@ -51,19 +51,31 @@ pip install pandas cohere gspread gspread_dataframe python-dotenv google-auth go
    - Enable the Google Sheets API and download the service account key as `GOOGLE_SHEETS_CREDS.json`.
    - Share your Google Sheet with the service account email (ending in `@project.iam.gserviceaccount.com`).
 
-4. **Update sheet ID**  
+4. **Update the Sheet ID**  
    In the script, replace:
    ```python
    sheet_id = "your_google_sheet_id_here"
    ```
    with the actual ID from your Google Sheet URL.
 
-5. **Provide Your Fine-Tuned Model**  
-   Replace this line with your actual Cohere model ID:
+5. **Fine-Tune Your Sentiment Model**  
+   - Run the **`trained-finetuned-model.py`** script first to create and train your Cohere fine-tuned sentiment model.
+   - After the model is trained and ready, update the model ID inside **`auto.py`**:
    ```python
    model="your-fine-tuned-model-id"
    ```
 
+6. **Run the Automation**  
+   - After completing the fine-tuning step once, you can now run **`auto.py`** anytime to automatically summarize, classify, and update the Google Sheet!
+   ### 📜 How to Run
+   
+   ```bash
+   # Step 1: Fine-tune the model (only needs to be done once)
+   python trained-finetuned-model.py
+
+   # Step 2: Run the automation script
+   python auto.py
+   ```
 ---
 
 ## 📈 Output Example
@@ -108,9 +120,11 @@ project-folder/
 ---
 
 ## 🙋‍♀️ Authors
-- Chidimma Ijoma
-    - [GitHub](https://github.com/chidi-ijoma)
-- Khadijat Agboola
-    - [GitHub](https://github.com/KhadijahAgboola)
+
+- **Chidimma Ijoma**  
+  [GitHub](https://github.com/chidi-ijoma)
+
+- **Khadijat Agboola**  
+  [GitHub](https://github.com/KhadijahAgboola)
 
 ---
